@@ -1,1 +1,0 @@
-# license-plate-detection-demo1
