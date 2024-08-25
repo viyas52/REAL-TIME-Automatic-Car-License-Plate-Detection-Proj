@@ -24,9 +24,11 @@ class DataIngestion:
         try:
             model_url = self.data_ingestion_config.model_download_url
             data_dir = self.data_ingestion_config.data_ingestion_dir
+            model_file_dir = self.data_ingestion_config.pretrained_model_file_path
             os.makedirs(data_dir,exist_ok=True)
+            os.makedirs(model_file_dir,exist_ok=True)
             model_file_name = os.path.basename(model_url)
-            model_file_path = os.path.join(self.data_ingestion_config.pretrained_model_file_path,model_file_name)
+            model_file_path = os.path.join(model_file_dir,model_file_name)
             logging.info(f"Downloading data from {model_url} into {model_file_path} directory")
             urllib.request.urlretrieve(model_url, model_file_path)
             logging.info(f"Downloaded data from {model_url} into {model_file_path} directory")        

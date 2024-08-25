@@ -4,7 +4,7 @@ from datetime import datetime
 
 from ANPR.constant.training_pipeline import *
 
-TIMESTAMP:str = datetime.now.strftime("%d_%m_%y-%I_%M%p")
+TIMESTAMP:str = datetime.now().strftime("%d_%m_%y-%I_%M_%p")
 
 @dataclass
 class TrainingPipelineConfig:
