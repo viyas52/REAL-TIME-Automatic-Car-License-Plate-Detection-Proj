@@ -20,4 +20,3 @@ class DataIngestionConfig:
 
     model_download_url: str = MODEL_DOWNLOAD_URL
     
-'''git'''

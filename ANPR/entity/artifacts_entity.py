@@ -4,4 +4,3 @@ from dataclasses import dataclass
 class DataIngestionArtifact:
     pretrained_model_path:str
     
-'''git'''
