@@ -9,6 +9,13 @@
 https://github.com/viyas52/license-plate-detection-demo1.git
 ```
 
+--> Also clone the open source "sort" repository for multiple object tracking purpose
+
+```bash
+https://github.com/viyas52/sort.git
+```
+
+
 --> Create a conda environment and activate it
 
 ```bash
