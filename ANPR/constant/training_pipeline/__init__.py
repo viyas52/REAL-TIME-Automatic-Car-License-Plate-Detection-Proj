@@ -11,7 +11,7 @@ DATA_INGESTION_DIR_NAME:str = "data_ingestion"
 
 PRE_TRAINED_MODEL:str = "pretrained_model"
 
-MODEL_DOWNLOAD_URL:str = "https://github.com/viyas52/End-to-End-license-Plate-Detection-Proj/raw/main/best_model/BLPDM.pt"
+MODEL_DOWNLOAD_URL:str = "https://github.com/viyas52/data_dump_repo/raw/main/license_models.zip"
 
 
 
@@ -23,7 +23,7 @@ DATA_VALIDATION_DIR_NAME: str = "data_validation"
 
 DATA_VALIDATION_STATUS_FILE: str = 'status.txt'
 
-DATA_VALIDATION_ALL_REQUIRED_FILES = ["BLPDM.pt"]
+DATA_VALIDATION_ALL_REQUIRED_FILES = ["BLPDM.pt","yolov10n.pt"]
 
 
 """

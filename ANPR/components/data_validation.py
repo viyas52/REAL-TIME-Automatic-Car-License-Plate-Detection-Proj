@@ -23,7 +23,7 @@ class DataValidation:
     
     def validate_all_files_exist(self) -> bool:
         try:
-            
+            model_names = []
             validation_status = None
             all_files = os.listdir(self.data_ingestion_artifact.pretrained_model_path)
 
@@ -35,12 +35,13 @@ class DataValidation:
                         f.write(f"Validation status: {validation_status}")
 
                 else:
+                    model_names.append(file)
                     validation_status = True
                     os.makedirs(self.data_validation_config.data_validation_dir, exist_ok=True)
                     with open(self.data_validation_config.valid_status_file_dir, 'w') as f:
                         f.write(f"Validation status: {validation_status}")
             
-            return validation_status
+            return validation_status, model_names
 
         except Exception as e:
             raise CustomException(e, sys)
@@ -50,7 +51,7 @@ class DataValidation:
     def initiate_data_validation(self) -> DataValidationArtifact: 
         logging.info("Entered initiate_data_validation method of DataValidation class")
         try:
-            status = self.validate_all_files_exist()
+            status,names = self.validate_all_files_exist()
             data_validation_artifact = DataValidationArtifact(
                 validation_status=status)
 
@@ -58,9 +59,10 @@ class DataValidation:
             logging.info(f"Data validation artifact: {data_validation_artifact}")
             
             os.makedirs("models_used",exist_ok=True)
-            copy_file_path = os.path.join(self.data_ingestion_artifact.pretrained_model_path,self.data_ingestion_artifact.pretrained_model_name)
             if status:
-                shutil.copy(copy_file_path, "models_used")
+                for x in names:
+                    full_model_path = os.path.join(self.data_ingestion_artifact.pretrained_model_path,x)
+                    shutil.copy(full_model_path, "models_used")
 
             return data_validation_artifact
 
