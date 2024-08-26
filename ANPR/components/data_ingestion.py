@@ -33,7 +33,7 @@ class DataIngestion:
             urllib.request.urlretrieve(model_url, model_file_path)
             logging.info(f"Downloaded data from {model_url} into {model_file_path} directory")        
             
-            return model_file_path
+            return model_file_dir,model_file_name
             
         except Exception as e:
             raise CustomException(e, sys)
@@ -41,9 +41,9 @@ class DataIngestion:
     def initiate_data_ingestion(self)-> DataIngestionArtifact:
         logging.info("Entered initiate_data_ingestion method of Data_Ingestion class")
         try:
-            model_file_path = self.download_model()
+            model_file_dir,model_file_name = self.download_model()
             
-            data_ingestion_artifact = DataIngestionArtifact(pretrained_model_path=model_file_path)
+            data_ingestion_artifact = DataIngestionArtifact(pretrained_model_path=model_file_dir,pretrained_model_name=model_file_name)
             
             logging.info("Exited initiate_data_ingestion method of Data_Ingestion class")
             
