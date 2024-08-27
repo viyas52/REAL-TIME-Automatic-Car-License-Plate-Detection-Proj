@@ -1,4 +1,4 @@
-# license-plate-detection-demo1
+# Automatic Car License Plate Detection
 
 ## How to run:
 ### steps :
@@ -19,11 +19,11 @@ https://github.com/viyas52/sort.git
 --> Create a conda environment and activate it
 
 ```bash
-conda create -n ANPR python=3.9 -y
+conda create -n ALPR python=3.9 -y
 ```
 
 ```bash
-conda activate ANPR
+conda activate ALPR
 ```
 
 --> Install the requirements
@@ -32,6 +32,12 @@ conda activate ANPR
 pip install -r requirements.txt
 ```
 
+--> Also install the cuda and pytorch libraries according to your system configuration
+-- run this to check it
+
+```bash
+python testing.py
+```
 
 --> To run the application, type this in the terminal
 

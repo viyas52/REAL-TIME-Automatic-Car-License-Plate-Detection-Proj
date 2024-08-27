@@ -1,5 +1,5 @@
 import sys
-from ANPR.logger import logging
+from ALPD.logger import logging
 
 def error_message_datail(error, error_detail:sys):
     _,_,exc_tb = error_detail.exc_info()

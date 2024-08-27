@@ -1,4 +1,4 @@
-from ANPR.constants.password import *
+from ALPD.constants.password import *
 
 '''
 Constants for ANPR Project

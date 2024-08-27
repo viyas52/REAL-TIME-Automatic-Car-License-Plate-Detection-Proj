@@ -7,15 +7,15 @@ import mysql.connector
 
 from sort.sort import Sort  # An open source realtime multiple object tracking program , clone this repository into your project folder
 
-from ANPR.components.data_ingestion import read_video
-from ANPR.components.data_validation import validate_video
-from ANPR.components.model_runner import load_yolo_model, run_inference
-from ANPR.components.visualize import draw_border,process_video
-from ANPR.components.db import *
-from ANPR.components.image_processing import preprocess_image
-from ANPR.components.add_missing_data import interpolate_bounding_boxes
-from ANPR.utils import *
-from ANPR.constants import *
+from ALPD.components.data_ingestion import read_video
+from ALPD.components.data_validation import validate_video
+from ALPD.components.model_runner import load_yolo_model, run_inference
+from ALPD.components.visualize import draw_border,process_video
+from ALPD.components.database_connector import *
+from ALPD.components.image_processing import preprocess_image
+from ALPD.components.add_missing_data import interpolate_bounding_boxes
+from ALPD.utils import *
+from ALPD.constants import *
 
 
 

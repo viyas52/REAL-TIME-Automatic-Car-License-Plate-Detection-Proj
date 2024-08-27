@@ -7,16 +7,16 @@ def draw_border(img, top_left, bottom_right, color=(0, 0, 255), thickness=5, lin
     x1, y1 = top_left
     x2, y2 = bottom_right
 
-    cv2.line(img, (x1, y1), (x1, y1 + line_length_y), color, thickness)  #-- top-left
+    cv2.line(img, (x1, y1), (x1, y1 + line_length_y), color, thickness)  #top-left
     cv2.line(img, (x1, y1), (x1 + line_length_x, y1), color, thickness)
 
-    cv2.line(img, (x1, y2), (x1, y2 - line_length_y), color, thickness)  #-- bottom-left
+    cv2.line(img, (x1, y2), (x1, y2 - line_length_y), color, thickness)  #bottom-left
     cv2.line(img, (x1, y2), (x1 + line_length_x, y2), color, thickness)
 
-    cv2.line(img, (x2, y1), (x2 - line_length_x, y1), color, thickness)  #-- top-right
+    cv2.line(img, (x2, y1), (x2 - line_length_x, y1), color, thickness)  #top-right
     cv2.line(img, (x2, y1), (x2, y1 + line_length_y), color, thickness)
 
-    cv2.line(img, (x2, y2), (x2, y2 - line_length_y), color, thickness)  #-- bottom-right
+    cv2.line(img, (x2, y2), (x2, y2 - line_length_y), color, thickness)  #bottom-right
     cv2.line(img, (x2, y2), (x2 - line_length_x, y2), color, thickness)
 
     return img
@@ -37,7 +37,7 @@ def process_video(results, cap, out):
 
     cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
 
-    # Read frames
+   
     ret = True
     while ret:
         ret, frame = cap.read()
@@ -58,8 +58,8 @@ def process_video(results, cap, out):
                 license_plate_text = license_plate[df_.iloc[row_indx]['car_id']]['license_plate_number']
 
                 # Define text background
-                text_bg_color = (255, 255, 255)  # White background
-                text_color = (0, 0, 0)  # Black text
+                text_bg_color = (255, 255, 255) 
+                text_color = (0, 0, 0)  
 
                 # Define text size and position
                 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -79,9 +79,6 @@ def process_video(results, cap, out):
 
             out.write(frame)
             frame = cv2.resize(frame, (1280, 720))
-
-            # cv2.imshow('frame', frame)
-            # cv2.waitKey(0)
 
     out.release()
     cap.release()
