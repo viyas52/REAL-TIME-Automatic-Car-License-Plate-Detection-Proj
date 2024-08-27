@@ -1,69 +1,104 @@
-import sys,os
-from ANPR.logger import logging
-from ANPR.exception import CustomException
+import os
+from ANPR.components.data_ingestion import read_video
+from ANPR.components.data_validation import validate_video
+from ANPR.components.model_runner import load_yolo_model, run_inference
+from ANPR.components.visualize import draw_border,process_video
+from ANPR.components.db import *
+from ANPR.components.image_processing import preprocess_image
+from ANPR.components.add_missing_data import interpolate_bounding_boxes
+from ANPR.utils import *
+from sort.sort import Sort
+import numpy as np
+import csv
+import pandas as pd
+import ast
+import mysql.connector
 
-from ANPR.components.data_ingestion import DataIngestion
-from ANPR.components.data_validation import DataValidation
 
 
-from ANPR.entity.config_entity import *
-from ANPR.entity.artifacts_entity import *
-
-class TrainPipeline:
-    def __init__(self) -> None:
-        self.data_ingestion_config = DataIngestionConfig()
-        self.data_validation_config = DataValidationConfig()
+def run_pipeline(coco_model_path, license_plate_model_path, input_video_path, output_dir):
+    coco_model = load_yolo_model(coco_model_path)
+    license_plate_detector = load_yolo_model(license_plate_model_path)
+    
+    cap = read_video(input_video_path)
+    validate_video(cap)
+    
+    os.makedirs(output_dir, exist_ok=True)
+    
+    mot_tracker = Sort()
+    vehicals = [2, 5, 7]
+    frame_nmr = -1
+    ret = True
+    results = {}
+    
+    while ret:
+        frame_nmr += 1
+        ret, frame = cap.read()
         
-    def start_data_ingestion(self)-> DataIngestionArtifact:
-        try: 
-            logging.info(
-                "Entered the start_data_ingestion method of TrainPipeline class"
-            )
-            logging.info("Getting the model from URL")
-
-            data_ingestion = DataIngestion(data_ingestion_config =  self.data_ingestion_config)
-
-            data_ingestion_artifact = data_ingestion.initiate_data_ingestion()
-            logging.info("Got the model from the URL")
-            logging.info(
-                "Exited the start_data_ingestion method of TrainPipeline class"
-            )
-
-            return data_ingestion_artifact
-        
-        except Exception as e:
-            raise CustomException(e, sys) from e
-        
-        
-    def start_data_validation(self, data_ingestion_artifact: DataIngestionArtifact) -> DataValidationArtifact:
-        logging.info("Entered the start_data_validation method of TrainPipeline class")
-
-        try:
-            data_validation = DataValidation(
-                data_ingestion_artifact=data_ingestion_artifact,
-                data_validation_config=self.data_validation_config,
-            )
-
-            data_validation_artifact = data_validation.initiate_data_validation()
-
-            logging.info("Performed the data validation operation")
-
-            logging.info(
-                "Exited the start_data_validation method of TrainPipeline class"
-            )
-
-            return data_validation_artifact
-
-        except Exception as e:
-            raise CustomException(e, sys) from e
-        
-        
+        if ret:
+            detections = run_inference(coco_model, frame)
+            trac_ids = mot_tracker.update(np.asarray([[x1, y1, x2, y2, score] for x1, y1, x2, y2, score, class_id in detections.boxes.data.tolist() if int(class_id) in vehicals]))
+            
+            license_plates = run_inference(license_plate_detector, frame)
+            
+            for license_plate in license_plates.boxes.data.tolist():
+                x1, y1, x2, y2, score, class_id = license_plate
+                xcar1, ycar1, xcar2, ycar2, car_id = get_car(license_plate, trac_ids)
+                
+                if car_id != -1:
+                    license_plate_crop = frame[int(y1):int(y2), int(x1):int(x2)]
+                    preprocessed_image_for_ocr = preprocess_image(license_plate_crop)
+                    license_plate_text, license_plate_text_score = read_license_plate(preprocessed_image_for_ocr)
+                    
+                    if license_plate_text is not None:
+                        if frame_nmr not in results:
+                            results[frame_nmr] = {}
+                        results[frame_nmr][int(car_id)] = {
+                            'car': {'bbox': [xcar1, ycar1, xcar2, ycar2]},
+                            'license_plate': {
+                                'bbox': [x1, y1, x2, y2],
+                                'text': license_plate_text,
+                                'bbox_score': score,
+                                'text_score': license_plate_text_score
+                            }
+                        }
+    
 
     
-    def run_pipeline(self) -> None:
-        try:
-            data_ingestion_artifact = self.start_data_ingestion()
-            data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
-            
-        except Exception as e: 
-            raise CustomException(e,sys)
+    write_csv(results, 'results/test.csv')
+    with open('results/test.csv', 'r') as file:
+        reader = csv.DictReader(file)
+        data = list(reader)
+    
+    interpolated_data = interpolate_bounding_boxes(data)
+    
+    header = ['frame_nmr', 'car_id', 'car_bbox', 'license_plate_bbox', 'license_plate_bbox_score', 'license_number', 'license_number_score']
+    with open('results/test_interpolated.csv', 'w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=header)
+        writer.writeheader()
+        writer.writerows(interpolated_data)
+    
+    results = pd.read_csv('results/test_interpolated.csv', encoding='ISO-8859-1')
+
+    # Load video
+    cap = cv2.VideoCapture(input_video_path)
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Specify the codec
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    out = cv2.VideoWriter('output/out3.mp4', fourcc, fps, (width, height))
+    
+    process_video(results,cap,out)
+
+    conn = mysql.connector.connect(host='localhost', user='root', password='mysql#98841@', database='license_plate_db')
+    
+    create_table(conn)
+    
+    results = pd.read_csv('results/test.csv', encoding='ISO-8859-1')
+    process_results(conn, results)
+    
+    conn.close()
+    
+    
+    
