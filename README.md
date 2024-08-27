@@ -6,7 +6,7 @@
 --> Clone the repository
 
 ```bash
-https://github.com/viyas52/license-plate-detection-demo1.git
+https://github.com/viyas52/Automatic-Car-License-Plate-Detection-Proj.git
 ```
 
 --> Also clone the open source "sort" repository for multiple object tracking 
