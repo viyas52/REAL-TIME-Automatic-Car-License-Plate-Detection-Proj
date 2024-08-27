@@ -162,5 +162,8 @@ cython_debug/
 #.idea/
 
 
-artifacts/
-models_used/
+models/
+demos/
+output/
+results/
+sort/
