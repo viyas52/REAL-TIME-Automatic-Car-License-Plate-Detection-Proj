@@ -165,5 +165,6 @@ cython_debug/
 models/
 demos/
 output/
-results/
+res/
 sort/
+password.py

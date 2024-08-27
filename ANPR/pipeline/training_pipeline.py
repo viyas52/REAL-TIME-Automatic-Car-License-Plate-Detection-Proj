@@ -1,4 +1,12 @@
 import os
+import csv
+import numpy as np
+import pandas as pd
+
+import mysql.connector
+
+from sort.sort import Sort  # An open source realtime multiple object tracking program , clone this repository into your project folder
+
 from ANPR.components.data_ingestion import read_video
 from ANPR.components.data_validation import validate_video
 from ANPR.components.model_runner import load_yolo_model, run_inference
@@ -7,16 +15,12 @@ from ANPR.components.db import *
 from ANPR.components.image_processing import preprocess_image
 from ANPR.components.add_missing_data import interpolate_bounding_boxes
 from ANPR.utils import *
-from sort.sort import Sort
-import numpy as np
-import csv
-import pandas as pd
-import ast
-import mysql.connector
+from ANPR.constants import *
 
 
 
-def run_pipeline(coco_model_path, license_plate_model_path, input_video_path, output_dir):
+
+def run_pipeline():
     coco_model = load_yolo_model(coco_model_path)
     license_plate_detector = load_yolo_model(license_plate_model_path)
     
@@ -65,37 +69,37 @@ def run_pipeline(coco_model_path, license_plate_model_path, input_video_path, ou
     
 
     
-    write_csv(results, 'results/test.csv')
-    with open('results/test.csv', 'r') as file:
+    write_csv(results, raw_csv)
+    with open(raw_csv, 'r') as file:
         reader = csv.DictReader(file)
         data = list(reader)
     
     interpolated_data = interpolate_bounding_boxes(data)
     
     header = ['frame_nmr', 'car_id', 'car_bbox', 'license_plate_bbox', 'license_plate_bbox_score', 'license_number', 'license_number_score']
-    with open('results/test_interpolated.csv', 'w', newline='') as file:
+    with open(interpolated_csv, 'w', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=header)
         writer.writeheader()
         writer.writerows(interpolated_data)
     
-    results = pd.read_csv('results/test_interpolated.csv', encoding='ISO-8859-1')
+    results = pd.read_csv(interpolated_csv, encoding='ISO-8859-1')
 
-    # Load video
+   
     cap = cv2.VideoCapture(input_video_path)
 
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Specify the codec
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     fps = cap.get(cv2.CAP_PROP_FPS)
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    out = cv2.VideoWriter('output/out3.mp4', fourcc, fps, (width, height))
+    out = cv2.VideoWriter(output_video, fourcc, fps, (width, height))
     
     process_video(results,cap,out)
 
-    conn = mysql.connector.connect(host='localhost', user='root', password='mysql#98841@', database='license_plate_db')
+    conn = mysql.connector.connect(host='localhost', user='root', password=mysql_password, database=database_name)
     
     create_table(conn)
     
-    results = pd.read_csv('results/test.csv', encoding='ISO-8859-1')
+    results = pd.read_csv(raw_csv, encoding='ISO-8859-1')
     process_results(conn, results)
     
     conn.close()
