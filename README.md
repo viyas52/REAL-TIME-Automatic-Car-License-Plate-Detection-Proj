@@ -9,7 +9,7 @@
 https://github.com/viyas52/license-plate-detection-demo1.git
 ```
 
---> Also clone the open source "sort" repository for multiple object tracking purpose
+--> Also clone the open source "sort" repository for multiple object tracking 
 
 ```bash
 https://github.com/viyas52/sort.git

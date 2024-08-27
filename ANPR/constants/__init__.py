@@ -16,7 +16,7 @@ raw_csv:str = 'res/test.csv'
 
 interpolated_csv:str = 'res/test_interpolated.csv'
 
-output_video:str = 'output/out4.mp4'
+output_video:str = 'output/out.mp4'
 
 mysql_password:str = sql
 
