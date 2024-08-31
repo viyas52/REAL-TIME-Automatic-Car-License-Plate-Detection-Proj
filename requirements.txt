@@ -5,4 +5,5 @@ easyocr
 paddlepaddle 
 paddleocr
 mysql-connector-python
--e .
+streamlit
+#-e .
