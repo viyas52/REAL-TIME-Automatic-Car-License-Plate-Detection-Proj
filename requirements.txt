@@ -6,4 +6,6 @@ paddlepaddle
 paddleocr
 mysql-connector-python
 streamlit
+Flask
+streamlit
 #-e .
