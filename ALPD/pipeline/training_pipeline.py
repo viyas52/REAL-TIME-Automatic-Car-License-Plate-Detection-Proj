@@ -52,7 +52,7 @@ def run_pipeline():
                 if car_id != -1:
                     license_plate_crop = frame[int(y1):int(y2), int(x1):int(x2)]
                     preprocessed_image_for_ocr = preprocess_image(license_plate_crop)
-                    license_plate_text, license_plate_text_score = read_license_plate(preprocessed_image_for_ocr)
+                    license_plate_text, license_plate_text_score = read_license_plate_2(preprocessed_image_for_ocr)
                     
                     if license_plate_text is not None:
                         if frame_nmr not in results:
