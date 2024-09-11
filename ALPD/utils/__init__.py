@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 
 from paddleocr import PaddleOCR
+import easyocr
 
 ocr = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=True)
 
