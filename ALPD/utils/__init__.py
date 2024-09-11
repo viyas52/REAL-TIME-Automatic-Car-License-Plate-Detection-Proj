@@ -6,6 +6,7 @@ from paddleocr import PaddleOCR
 import easyocr
 
 ocr = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=True)
+reader = easyocr.Reader(['en'], gpu=True)
 
 dict_char_to_int = {'O': '0',
                     'I': '1',
@@ -124,7 +125,7 @@ def format_license_2(text):
 
 
 
-def read_license_plate(license_plate_crop):
+def read_license_plate_1(license_plate_crop):
     
     detections = ocr.ocr(license_plate_crop)
     
@@ -150,6 +151,36 @@ def read_license_plate(license_plate_crop):
                 return format_license_2(text), score
 
     return None, None
+
+
+def read_license_plate_2(license_plate_crop):
+    """
+    Read the license plate text from the given cropped image.
+
+    Args:
+        license_plate_crop (PIL.Image.Image): Cropped image containing the license plate.
+
+    Returns:
+        tuple: Tuple containing the formatted license plate text and its confidence score.
+    """
+
+    detections = reader.readtext(license_plate_crop)
+
+    for detection in detections:
+        bbox, text, score = detection
+        print(text)
+        text = text.upper().replace(' ', '')
+        print(text)
+
+        if license_complies_format_1(text):
+            print(format_license_1(text),score)
+            return format_license_1(text), score
+        
+        if license_complies_format_2(text):
+            print(format_license_2(text),score)
+            return format_license_2(text), score
+
+    return None,None
 
 
 import numpy as np
