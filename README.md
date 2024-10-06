@@ -1,5 +1,7 @@
 # Automatic Car License Plate Detection
 
+This project is an end-to-end solution for automatic car license plate detection, recognition, and vehicle tracking. It uses deep learning models(YOLOv10) for accurate detection, OCR for plate recognition, and integrates a MySQL database for storing and verifying authorized license plates.
+
 ## How to run:
 ### steps :
 
