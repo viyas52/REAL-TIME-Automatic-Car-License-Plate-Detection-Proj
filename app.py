@@ -1,3 +1,12 @@
-from ALPD.pipeline.training_pipeline import run_pipeline
+import os
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory
+import cv2
+import numpy as np
+import mysql.connector
+from werkzeug.utils import secure_filename
 
-obj = run_pipeline()
+app = Flask(__name__)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
