@@ -44,5 +44,5 @@ python testing.py
 --> To run the application, type this in the terminal
 
 ```bash
-python app.py
+python st.py
 ```
