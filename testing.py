@@ -1,4 +1,10 @@
 import torch
+import paddle
+
+if paddle.is_compiled_with_cuda():
+    print("CUDA is available. PaddleOCR will use the GPU.")
+else:
+    print("CUDA is not available. PaddleOCR will use the CPU.")
 
 cuda_available = torch.cuda.is_available()
 print(f"CUDA Available: {cuda_available}")

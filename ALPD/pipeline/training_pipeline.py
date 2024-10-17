@@ -20,7 +20,7 @@ from ALPD.constants import *
 
 
 
-def run_pipeline():
+def run_pipeline(input_video_path):
     coco_model = load_yolo_model(coco_model_path)
     license_plate_detector = load_yolo_model(license_plate_model_path)
     

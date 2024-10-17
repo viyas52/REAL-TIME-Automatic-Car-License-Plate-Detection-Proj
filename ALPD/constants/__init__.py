@@ -8,8 +8,6 @@ coco_model_path:str = "models/yolov10n.pt"
 
 license_plate_model_path:str = "models/BLPDM.pt"
 
-input_video_path:str = "demos/demo.mp4"
-
 output_dir:str = "output"
 
 raw_csv:str = 'res/test.csv'
