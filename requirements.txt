@@ -9,4 +9,5 @@ mysql-connector-python
 streamlit
 Flask
 streamlit
+albumentations
 #-e .

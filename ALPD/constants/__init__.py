@@ -1,5 +1,3 @@
-from ALPD.constants.password import *
-
 '''
 Constants for ANPR Project
 '''
@@ -16,6 +14,6 @@ interpolated_csv:str = 'res/test_interpolated.csv'
 
 output_video:str = 'output/out.mp4'
 
-mysql_password:str = sql
+mysql_password:str = 'mysql#98841'
 
 database_name:str = 'license_plate_db'
