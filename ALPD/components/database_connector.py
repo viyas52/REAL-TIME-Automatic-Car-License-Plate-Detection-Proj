@@ -54,14 +54,16 @@ def insert_data(conn, license_plate, confidence_score, permission):
 
 def process_results(conn, results):
     for car_id in np.unique(results['car_id']):
-        if (results['car_id'] == car_id).sum() >= 0:
-            max_score = np.amax(results[results['car_id'] == car_id]['license_number_score'])
-            license_plate_number = results[(results['car_id'] == car_id) &
-                                           (results['license_number_score'] == max_score)]['license_number'].iloc[0]
-            
+        filtered_results = results.loc[results['car_id'] == car_id]
+        if not filtered_results.empty:
+            max_score = filtered_results['license_number_score'].max()
+            license_plate_number = filtered_results.loc[
+                filtered_results['license_number_score'] == max_score, 'license_number'
+            ].iloc[0]
             permission = "Allowed" if license_plate_number in authorized_plates else "Not Allowed"
             insert_data(conn, license_plate_number, max_score, permission)
-            
+        else:
+            print(f"No results found for car_id: {car_id}")
             
 def create_table(conn):
     cursor = conn.cursor()
