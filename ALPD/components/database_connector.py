@@ -2,6 +2,7 @@ import numpy as np
 from datetime import datetime
 import mysql.connector
 from ALPD.constants import mysql_password 
+import pandas as pd
 # Replace with your RDS details
 rds_endpoint = 'alpd.cvquoeky09pg.ap-south-1.rds.amazonaws.com'
 username = 'admin'
