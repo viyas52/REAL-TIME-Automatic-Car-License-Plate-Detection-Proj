@@ -1,6 +1,8 @@
 FROM python:3.8-slim-buster
 
-RUN apt update -y && apt install awscli -y
+RUN apt update -y && \
+    apt install -y awscli libgl1
+    
 WORKDIR /app
 
 COPY . /app
