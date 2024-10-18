@@ -61,7 +61,8 @@ def process_results(conn, results):
             
             permission = "Allowed" if license_plate_number in authorized_plates else "Not Allowed"
             insert_data(conn, license_plate_number, max_score, permission)
-
+            
+            
 def create_table(conn):
     cursor = conn.cursor()
     cursor.execute('''
