@@ -6,4 +6,6 @@ WORKDIR /app
 COPY . /app
 RUN pip install -r requirements.txt
 
-CMD ["python3","streamlit run st.py"]
+EXPOSE 8501
+
+CMD ["streamlit", "run", "st.py"]
