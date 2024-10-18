@@ -1,6 +1,7 @@
 ultralytics
 scikit-image
 filterpy
+opencv-python
 easyocr
 paddlepaddle 
 paddleocr
