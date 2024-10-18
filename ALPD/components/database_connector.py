@@ -53,6 +53,9 @@ def insert_data(conn, license_plate, confidence_score, permission):
     print(f"Data inserted: license_plate={license_plate}, confidence_score={confidence_score}, permission={permission}, timestamp={timestamp}")
 
 def process_results(conn, results):
+    if isinstance(results, dict):
+        results = pd.DataFrame(results)
+        
     for car_id in np.unique(results['car_id']):
         filtered_results = results.loc[results['car_id'] == car_id]
         if not filtered_results.empty:
