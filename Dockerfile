@@ -1,7 +1,10 @@
 FROM python:3.8-slim-buster
 
-RUN apt update -y && \
-    apt install -y awscli libgl1
+# Install required libraries
+RUN apt-get update && \
+    apt-get install -y libglib2.0-0 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
     
 WORKDIR /app
 
