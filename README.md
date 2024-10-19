@@ -49,17 +49,24 @@ python st.py
 
 #for ec2
 #optinal
-
+```bash
 sudo apt-get update -y
+```
 
+```bash
 sudo apt-get upgrade
+```
 
 #required
-
+```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
-
+```
+```bash
 sudo sh get-docker.sh
-
+```
+```bash
 sudo usermod -aG docker ubuntu
-
+```
+```bash
 newgrp docker
+```
