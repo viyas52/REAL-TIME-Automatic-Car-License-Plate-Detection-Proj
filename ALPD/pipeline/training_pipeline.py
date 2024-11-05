@@ -95,7 +95,7 @@ def run_pipeline(input_video_path):
     
     process_video(results,cap,out)
 
-    conn = mysql.connector.connect(host='localhost', user='root', password=mysql_password, database=database_name)
+    conn = mysql.connector.connect(host='localhost', user='root', password=mysql_password)
     
     create_table(conn)
     
