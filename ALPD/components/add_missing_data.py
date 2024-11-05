@@ -88,4 +88,4 @@ def interpolate_bounding_boxes(data):
 
             interpolated_data.append(row)
 
-    return interpolated_data
+    return interpolated_data 
